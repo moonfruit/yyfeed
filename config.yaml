@@ -1,0 +1,17 @@
+name: yyfeed
+version: 1
+
+libraries:
+- name: lxml
+  version: 2.3.4
+- name: PyCrypto
+  version: 2.6
+- name: MySQLdb
+- name: sqlalchemy
+  version: 0.9.7
+- name: pylibmc
+
+#cron:
+#- description: today
+#  url: /rrys/cron/today
+#  schedule: 0 */6 * * *
