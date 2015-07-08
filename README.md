@@ -1,2 +1,2 @@
 # yyfeed
-YY Feed Fetcher
+YY Feed Generator
