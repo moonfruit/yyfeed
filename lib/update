@@ -1,0 +1,5 @@
+#!/bin/sh
+wget -N -i- <<END
+https://raw.githubusercontent.com/defnull/bottle/master/bottle.py
+https://raw.githubusercontent.com/iurisilvio/bottle-sqlalchemy/master/bottle_sqlalchemy.py
+END
