@@ -8,14 +8,15 @@ from importlib import import_module
 
 def _mount(name):
     mount(name, import_module('.' + name, __name__).app)
-_mount('default')
+_mount('feed')
 
 
 @route('/')
 def home():
-    redirect('/default')
+    redirect('/feed')
 
 
+# noinspection PyUnresolvedReferences
 @route('/favicon.ico')
 @route('/static/<filepath:path>')
 def server_static(filepath='favicon.ico'):

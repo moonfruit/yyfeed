@@ -5,7 +5,12 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm.attributes import InstrumentedAttribute
 
 
+ID_SIZE = 64
+DESC_SIZE = 4000
+
+
 class Base(object):
+
     def __str__(self):
         return self._to_str()
 

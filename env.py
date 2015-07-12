@@ -15,7 +15,7 @@ __all__ = ['app']
 
 app_init(debug=True)
 
-# db_init(config.DB_ENGINE)
+db_init(config.DB_ENGINE)
 # cache_init(config.CACHE_SERVERS)
 
 
