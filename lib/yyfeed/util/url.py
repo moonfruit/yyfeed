@@ -8,6 +8,7 @@ from urllib2 import build_opener, HTTPCookieProcessor
 
 
 _opener = build_opener(HTTPCookieProcessor())
+_opener.addheaders = [('User-agent', 'Mozilla/5.0')]
 
 
 def urlget(url, data=None, **kargs):
@@ -26,7 +27,7 @@ def urlget(url, data=None, **kargs):
 
 
 def urlsoup(url, **kargs):
-    return BeautifulSoup(urlget(url), **kargs)
+    return BeautifulSoup(urlget(url), 'lxml', **kargs)
 
 
 def soup_filter(*args, **kargs):
