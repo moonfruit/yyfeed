@@ -1,7 +1,16 @@
 #!/usr/bin/python
 # -*- utf-8 -*-
 
+from os import environ
+
 from ..util.url import urlsoup, soup_filter
+
+
+def _urlsoup(url, **kargs):
+    environ['disable_fetchurl'] = 1
+    soup = urlsoup(url, **kargs)
+    environ['disable_fetchurl'] = 0
+    return soup
 
 
 class Jandan(object):
@@ -12,12 +21,17 @@ class Jandan(object):
     def __init__(self, id='default'):
         self.id = id
 
+        if 'SERVER_SOFTWARE' in environ:
+            self._urlsoup = _urlsoup
+        else:
+            self._urlsoup = urlsoup
+
     def fetch(self, page=None):
         url = self.baseUrl
         if page:
             url = "%s/page-%d" % (url, page)
 
-        soup = urlsoup(url, parse_only=self._filter)
+        soup = self._urlsoup(url, parse_only=self._filter)
 
         ret = []
         for item in soup.find_all('li'):
