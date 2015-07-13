@@ -3,7 +3,7 @@
 
 from re import sub
 
-from bottle import Bottle, default_app, route
+from bottle import Bottle, default_app, request, route
 
 from ..db import Feed, FeedItem
 
@@ -15,27 +15,33 @@ app = Bottle()
 with app:
     assert app is default_app()
 
-    jandan_id = 'default'
+    JANDAN_PAGE_START = 900
 
     @route('/')
     @route('/default')
     @route('/jandan')
     def jandan(db, jandan):
-        feed = db.query(Feed).get(jandan_id)
+        page = request.params.get('page')
+        if page:
+            page = int(page)
+            if page < JANDAN_PAGE_START:
+                page = JANDAN_PAGE_START
+
+        feed = db.query(Feed).get(jandan.id)
         if feed is None:
             feed = Feed(
-                id = jandan_id,
+                id = jandan.id,
                 title = '煎蛋妹子图',
                 link = 'http://jandan.net/ooxx',
                 description = '煎蛋妹子图 Feed 生成器',
-                data = {'lastPage': 900}
+                data = {'lastPage': JANDAN_PAGE_START}
             )
             db.add(feed)
 
-        page, content = _jandan_fetch(db, jandan)
+        page, content = _jandan_fetch(db, jandan, page)
 
         lastPage = feed.data['lastPage']
-        if lastPage != page:
+        if lastPage < page:
             page, content2 = _jandan_fetch(db, jandan, lastPage)
             content += "\n" + content2
             feed.data = feed.data.copy()
