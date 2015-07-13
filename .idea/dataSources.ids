@@ -12,6 +12,7 @@
       <column name="title" sqlType="VARCHAR" precision="4000" scale="0" nullable="true" jdbcType="12"/>
       <column name="link" sqlType="VARCHAR" precision="4000" scale="0" nullable="true" jdbcType="12"/>
       <column name="description" sqlType="VARCHAR" precision="4000" scale="0" nullable="true" jdbcType="12"/>
+      <column name="data" sqlType="BLOB" precision="65535" scale="0" nullable="true" jdbcType="-4"/>
       <primary-key name="PRIMARY" columns="id"/>
       <exported-key name="feed_item_ibfk_1" table="feed_item" schema="" catalog="test" columns="feed_id"/>
     </table>

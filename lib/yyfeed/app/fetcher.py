@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from bottle import Bottle, abort, default_app, request, route
-from datetime import datetime, timedelta
+from re import sub
+
+from bottle import Bottle, default_app, route
 
 from ..db import Feed, FeedItem
-from ..feed import Atom1Feed
 
 
 __all__ = ['app']
@@ -15,35 +15,46 @@ app = Bottle()
 with app:
     assert app is default_app()
 
-    # noinspection PyUnresolvedReferences
+    jandan_id = 'default'
+
     @route('/')
-    @route('/<id>')
-    def feed(db, id='default'):
-        days = timedelta(int(request.params.get('days', 3)))
-
-        feed = db.query(Feed).get(id)
+    @route('/default')
+    @route('/jandan')
+    def jandan(db, jandan):
+        feed = db.query(Feed).get(jandan_id)
         if feed is None:
-            abort(404, 'No such feed [%s].' % id)
-
-        atom = Atom1Feed(
-            id=feed.id,
-            title=feed.title,
-            link=feed.link,
-            description=feed.description,
-        )
-
-        for feedItem in (
-                db.query(FeedItem)
-                        .filter_by(feed_id = id)
-                        .filter(FeedItem.datetime >= datetime.today() - days)
-                        .order_by(FeedItem.datetime.desc())
-        ):
-            atom.add_item(
-                title=feedItem.title,
-                link=feedItem.link,
-                description=feedItem.description,
-                unique_id=feedItem.id,
+            feed = Feed(
+                id = jandan_id,
+                title = '煎蛋妹子图',
+                link = 'http://jandan.net/ooxx',
+                description = '煎蛋妹子图 Feed 生成器',
+                data = {'lastPage': 900}
             )
+            db.add(feed)
 
-        response.headers['Content-Type'] = atom.mime_type + '; charset=UTF-8'
-        return atom.writeString('utf-8')
+        page, content = _jandan_fetch(db, jandan)
+
+        lastPage = feed.data['lastPage']
+        if lastPage != page:
+            page, content2 = _jandan_fetch(db, jandan, lastPage)
+            content += "\n" + content2
+            feed.data = feed.data.copy()
+            feed.data['lastPage'] = lastPage + 1
+            db.merge(feed)
+
+        return content
+
+
+def _jandan_fetch(db, jandan, page=None):
+    content = ''
+    for item in jandan.fetch(page):
+        if not page:
+            page = int(sub(r'.*page-([0-9]+).*', r'\1', item['link']))
+
+        content += item['description']
+
+        feedItem = FeedItem(**item)
+        feedItem.feed_id = jandan.id
+        db.merge(feedItem)
+
+    return page, content

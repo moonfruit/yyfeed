@@ -36,7 +36,6 @@ class Jandan(object):
                 'title': a.text,
                 'link': a['href'],
                 'description': '\n'.join(imgs),
-                'datatime': None,
             }
 
             ret.append(entry)

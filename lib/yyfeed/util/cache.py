@@ -30,7 +30,6 @@ class FileCache(dict):
 
 try:
     import pylibmc as memcache
-
 except ImportError:
     import memcache
 

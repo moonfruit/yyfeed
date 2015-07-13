@@ -7,8 +7,9 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
 
 from .db import Base
+from .fetcher.jandan import Jandan
 from .util.cache import Cache
-
+from .util.web import InjectPlugin
 
 _plugins = []
 _cache = None
@@ -43,4 +44,9 @@ def db_init(engine=None, **kargs):
 def cache_init(servers):
     global _cache
     _cache = Cache(servers)
+    add_plugin(InjectPlugin('cache', _cache))
     return _cache
+
+
+def jandan_init():
+    return add_plugin(InjectPlugin('jandan', Jandan()))

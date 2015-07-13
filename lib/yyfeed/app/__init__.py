@@ -2,13 +2,15 @@
 # -*- coding: utf-8 -*-
 assert __name__ is not '__main__'
 
-from bottle import mount, redirect, route, static_file
 from importlib import import_module
+
+from bottle import mount, redirect, route, static_file
 
 
 def _mount(name):
     mount(name, import_module('.' + name, __name__).app)
 _mount('feed')
+_mount('fetcher')
 
 
 @route('/')

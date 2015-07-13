@@ -1,7 +1,7 @@
 #!/usr/bin/python
 # -*- utf-8 -*-
 
-from sqlalchemy import Column, DateTime, String, Text, ForeignKey
+from sqlalchemy import Column, DateTime, PickleType, String, Text, ForeignKey
 
 from .base import Base, ID_SIZE, DESC_SIZE
 
@@ -13,6 +13,7 @@ class Feed(Base):
     title = Column(String(DESC_SIZE))
     link = Column(String(DESC_SIZE))
     description = Column(String(DESC_SIZE))
+    data = Column(PickleType(0))
 
 
 class FeedItem(Base):
