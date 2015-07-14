@@ -10,9 +10,9 @@ from inspect import getargspec
 
 class InjectPlugin(object):
     api = 2
-    name = 'inject'
 
     def __init__(self, keyword, value):
+        self.name = keyword
         self.keyword = keyword
         self.value = value
 

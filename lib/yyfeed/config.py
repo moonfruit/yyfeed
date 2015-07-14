@@ -8,6 +8,7 @@ from sqlalchemy.orm import scoped_session, sessionmaker
 
 from .db import Base
 from .fetcher.jandan import Jandan
+from .fetcher.ttrss import Ttrss
 from .util.cache import Cache
 from .util.web import InjectPlugin
 
@@ -50,3 +51,7 @@ def cache_init(servers):
 
 def jandan_init():
     return add_plugin(InjectPlugin('jandan', Jandan()))
+
+
+def ttrss_init():
+    return add_plugin(InjectPlugin('ttrss', Ttrss('ttrss')))

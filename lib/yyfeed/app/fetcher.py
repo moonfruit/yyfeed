@@ -3,9 +3,10 @@
 
 from re import sub
 
-from bottle import Bottle, default_app, request, route
+from bottle import Bottle, default_app, redirect, request, route
 
 from ..db import Feed, FeedItem
+from ..util.web import urlfor
 
 
 __all__ = ['app']
@@ -16,6 +17,8 @@ with app:
     assert app is default_app()
 
     JANDAN_PAGE_START = 900
+    TTRSS_PAGE_START = 1
+
 
     @route('/')
     @route('/default')
@@ -32,9 +35,9 @@ with app:
             feed = Feed(
                 id = jandan.id,
                 title = '煎蛋妹子图',
-                link = 'http://jandan.net/ooxx',
+                link = jandan.baseUrl,
                 description = '煎蛋妹子图 Feed 生成器',
-                data = {'lastPage': JANDAN_PAGE_START}
+                data = {'lastPage': JANDAN_PAGE_START},
             )
             db.add(feed)
 
@@ -51,11 +54,56 @@ with app:
         return content
 
 
+    @route('/ttrss')
+    def ttrss(db, ttrss):
+        page = request.params.get('page')
+        if page:
+            page = int(page)
+            if page < TTRSS_PAGE_START:
+                page = TTRSS_PAGE_START
+
+        feed = db.query(Feed).get(ttrss.id)
+        if feed is None:
+            feed = Feed(
+                id = ttrss.id,
+                title = '图图',
+                link = ttrss.baseUrl,
+                description = '图图 Feed 生成器',
+            )
+            db.add(feed)
+
+        for item in ttrss.fetch(page):
+            feedItem = FeedItem(**item)
+            feedItem.feed_id = ttrss.id
+            db.merge(feedItem)
+
+        redirect(urlfor('ttrss/item'))
+
+
+    @route('/ttrss/item')
+    def ttrss_item(db, ttrss):
+        item = (
+            db.query(FeedItem)
+                .filter_by(feed_id=ttrss.id)
+                .filter(FeedItem.description == None)
+                .order_by(FeedItem.id)
+                .first()
+        )
+
+        if not item:
+            return 'No item'
+
+        item.description = ttrss.fetch_item(item.link)
+        db.merge(item)
+
+        return item.description
+
+
 def _jandan_fetch(db, jandan, page=None):
     content = ''
     for item in jandan.fetch(page):
         if not page:
-            page = int(sub(r'.*page-([0-9]+).*', r'\1', item['link']))
+            page = int(sub(r'.*page-(\d+).*', r'\1', item['link']))
 
         content += item['description']
 

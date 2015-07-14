@@ -23,6 +23,5 @@ class FeedItem(Base):
     id = Column(String(ID_SIZE), primary_key=True)
     title = Column(String(DESC_SIZE))
     link = Column(String(DESC_SIZE))
-    # description = Column(String(DESC_SIZE))
     description = Column(Text())
     datetime = Column(DateTime())

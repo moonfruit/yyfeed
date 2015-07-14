@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from datetime import datetime, timedelta
-
 from bottle import Bottle, abort, default_app, request, response, route
 
 from ..db import Feed, FeedItem
@@ -20,8 +18,6 @@ with app:
     @route('/')
     @route('/<id>')
     def feed(db, id='default'):
-        days = timedelta(int(request.params.get('days', 3)))
-
         feed = db.query(Feed).get(id)
         if feed is None:
             abort(404, 'No such feed [%s].' % id)
@@ -36,17 +32,25 @@ with app:
         for feedItem in (
                 db.query(FeedItem)
                         .filter_by(feed_id=id)
-                        .filter((FeedItem.datetime == None) |
-                                    (FeedItem.datetime >= datetime.today() - days))
+                        .filter(FeedItem.description != None)
                         .order_by(FeedItem.datetime.desc(), FeedItem.id.desc())
                         .limit(ITEM_MAX_NUM)
         ):
-            atom.add_item(
-                title=feedItem.title,
-                link=feedItem.link,
-                description=feedItem.description,
-                unique_id=feedItem.id,
-            )
+            if feedItem.datetime:
+                atom.add_item(
+                    title=feedItem.title,
+                    link=feedItem.link,
+                    description=feedItem.description,
+                    unique_id=feedItem.id,
+                    pubdate=feedItem.datetime,
+                )
+            else:
+                atom.add_item(
+                    title=feedItem.title,
+                    link=feedItem.link,
+                    description=feedItem.description,
+                    unique_id=feedItem.id,
+                )
 
         response.headers['Content-Type'] = atom.mime_type + '; charset=UTF-8'
         return atom.writeString('utf-8')

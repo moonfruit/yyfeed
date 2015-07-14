@@ -18,6 +18,7 @@ class Jandan(object):
 
     _filter = soup_filter('ol', 'commentlist')
 
+
     def __init__(self, id='default'):
         self.id = id
 
@@ -25,6 +26,7 @@ class Jandan(object):
             self._urlsoup = _urlsoup
         else:
             self._urlsoup = urlsoup
+
 
     def fetch(self, page=None):
         url = self.baseUrl

@@ -5,7 +5,9 @@ from yyfeed.fetcher.jandan import Jandan
 
 
 def main():
-    print(Jandan().fetch())
+    for item in Jandan().fetch():
+        print('--------')
+        print(item)
 
 
 if __name__ == '__main__':
