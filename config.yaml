@@ -12,6 +12,12 @@ libraries:
 - name: pylibmc
 
 cron:
-- description: today
+- description: jandan
+  url: /fetcher
+  schedule: "*/30 * * * *"
+- description: ttrss
+  url: /fetcher/ttrss
+  schedule: "0 */2 * * *"
+- description: ttrss_item
   url: /fetcher
   schedule: "*/30 * * * *"
