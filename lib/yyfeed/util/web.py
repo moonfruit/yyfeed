@@ -40,7 +40,7 @@ def exception_logger(func):
             return func(*args, **kargs)
         except Exception, e:
             if not isinstance(e, HTTPResponse) or isinstance(e, HTTPError):
-                logging.exception('Application raise an exception')
+                logging.exception('Application raise an exception: %s', e)
             raise
     return wrapper
 

@@ -37,7 +37,7 @@ if 'SERVER_SOFTWARE' in os.environ:
 
 else:
     DB_ENGINE = create_engine('mysql://root@localhost/test', pool_recycle=3600)
-    logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
+    # logging.getLogger('sqlalchemy.engine').setLevel(logging.INFO)
 
     CACHE_SERVERS = ['localhost:11211']
 

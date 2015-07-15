@@ -1,14 +1,14 @@
 #!/usr/bin/python
-# -*- utf-8 -*-
+# -*- coding: utf-8 -*-
 
 from os import environ
 
 from ..util.url import urlsoup, soup_filter
 
 
-def _urlsoup(url, **kargs):
+def _urlsoup(url, data=None, **kargs):
     environ['disable_fetchurl'] = 1
-    soup = urlsoup(url, **kargs)
+    soup = urlsoup(url, data, **kargs)
     environ['disable_fetchurl'] = 0
     return soup
 

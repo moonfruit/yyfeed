@@ -1,14 +1,33 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+from logging import error
 from urlparse import urlparse
 
 from bs4 import BeautifulSoup, SoupStrainer
 from urllib import urlencode
-from urllib2 import build_opener, HTTPCookieProcessor
+from urllib2 import build_opener, Request, BaseHandler, HTTPCookieProcessor
+
+
+HTTP_HEADER = {'User-agent': 'Mozilla/5.0 (compatible; Baiduspider/2.0; +http://www.baidu.com/search/spider.html)'}
+
+
+class HttpProcessor(BaseHandler):
+    handler_order = 499
+
+    def http_open(self, req):
+        error("headers = %s", req.headers)
+        error("un_headers = %s", req.unredirected_hdrs)
+        return None
+
+    def http_response(self, req, rsp):
+        error("rsp.headers = %s", rsp.headers)
+        return rsp
+
+    def http_error_403(self, req, fp, code, msg, hdrs):
+        return fp
 
 
 _opener = build_opener(HTTPCookieProcessor())
-_opener.addheaders = [('User-agent', 'Mozilla/5.0')]
 
 
 def urlget(url, data=None, **kargs):
@@ -23,11 +42,15 @@ def urlget(url, data=None, **kargs):
         kargs['data'] = data
         data = kargs
 
-    return _opener.open(url, data and urlencode(data) or None)
+    req = Request(url, headers=HTTP_HEADER)
+    if data:
+        req.add_data(urlencode(data))
+
+    return _opener.open(req)
 
 
-def urlsoup(url, **kargs):
-    return BeautifulSoup(urlget(url), 'lxml', **kargs)
+def urlsoup(url, data=None, **kargs):
+    return BeautifulSoup(urlget(url, data), 'lxml', **kargs)
 
 
 def soup_filter(*args, **kargs):
