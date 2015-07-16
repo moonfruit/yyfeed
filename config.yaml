@@ -15,9 +15,9 @@ cron:
 - description: jandan
   url: /fetcher
   schedule: "*/15 * * * *"
-- description: ttrss
-  url: /fetcher/ttrss
-  schedule: "0 */3 * * *"
-- description: ttrss_item
-  url: /fetcher/ttrss/item
-  schedule: "0 * * * *"
+#- description: ttrss
+#  url: /fetcher/ttrss
+#  schedule: "0 */3 * * *"
+#- description: ttrss_item
+#  url: /fetcher/ttrss/item
+#  schedule: "0 * * * *"
