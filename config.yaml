@@ -14,7 +14,7 @@ libraries:
 cron:
 - description: jandan
   url: /fetcher
-  schedule: "*/15 * * * *"
+  schedule: "*/30 * * * *"
 #- description: ttrss
 #  url: /fetcher/ttrss
 #  schedule: "0 */3 * * *"

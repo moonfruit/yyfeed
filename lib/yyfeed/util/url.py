@@ -15,8 +15,8 @@ class HttpProcessor(BaseHandler):
     handler_order = 499
 
     def http_open(self, req):
-        error("headers = %s", req.headers)
-        error("un_headers = %s", req.unredirected_hdrs)
+        error("req.headers = %s", req.headers)
+        error("req.un_headers = %s", req.unredirected_hdrs)
         return None
 
     def http_response(self, req, rsp):
