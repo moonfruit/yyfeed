@@ -3,6 +3,7 @@
 
 from datetime import datetime
 from re import match, sub
+from urllib import quote
 
 from ..util.url import urlsoup, soup_filter
 
@@ -55,10 +56,12 @@ class IPlayMtg(object):
         table = soup.find('table', 'vwtb')
 
         for img in table.find_all('img'):
-            if not img['src'].startswith('http'):
-                img2 = soup.new_tag('img')
+            img2 = soup.new_tag('img')
+            if img['src'].startswith('http'):
+                img2['src'] = img['src']
+            else:
                 img2['src'] = '%s/%s' % (self.domain, img['src'])
-                img.replace_with(img2)
+            img.replace_with(img2)
 
         for a in table.find_all('a'):
             href = a['href']
@@ -66,5 +69,8 @@ class IPlayMtg(object):
                 a.unwrap()
             elif not href.startswith('http'):
                 a['href'] = '%s/%s' % (self.domain, href)
+            elif href.startswith('http://www.iplaymtg.com/card/hs'):
+                a.string.wrap(soup.new_tag('b'))
+                a.unwrap()
 
         return str(table)
