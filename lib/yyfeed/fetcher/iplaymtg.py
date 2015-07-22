@@ -54,13 +54,17 @@ class IPlayMtg(object):
         soup = urlsoup(url, parse_only=self._item_filter)
         table = soup.find('table', 'vwtb')
 
-        for a in table.find_all('a', href='javascript:;'):
-            img = a.img
-            if img:
+        for img in table.find_all('img'):
+            if not img['src'].startswith('http'):
                 img2 = soup.new_tag('img')
                 img2['src'] = '%s/%s' % (self.domain, img['src'])
-                a.replace_with(img2)
-            else:
-                a.decompose()
+                img.replace_with(img2)
+
+        for a in table.find_all('a'):
+            href = a['href']
+            if not href or href == 'javascript:;':
+                a.unwrap()
+            elif not href.startswith('http'):
+                a['href'] = '%s/%s' % (self.domain, href)
 
         return str(table)
