@@ -7,11 +7,14 @@
       <w>datatime</w>
       <w>fetchurl</w>
       <w>imgs</w>
+      <w>iplaymtg</w>
       <w>jandan</w>
       <w>lxml</w>
       <w>righttext</w>
       <w>ttrss</w>
+      <w>vwtb</w>
       <w>yyfeed</w>
+      <w>zoomfile</w>
     </words>
   </dictionary>
 </component>

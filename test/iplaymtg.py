@@ -1,11 +1,11 @@
 #!/usr/bin/python
 # -*- utf-8 -*-
 
-from yyfeed.fetcher.ttrss import Ttrss
+from yyfeed.fetcher.iplaymtg import IPlayMtg
 
 
 def main():
-    fetcher = Ttrss()
+    fetcher = IPlayMtg()
     first = None
     for item in fetcher.fetch(1):
         if not first:

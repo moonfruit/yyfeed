@@ -21,3 +21,9 @@ cron:
 #- description: ttrss_item
 #  url: /fetcher/ttrss/item
 #  schedule: "0 * * * *"
+- description: iplaymtg
+  url: /fetcher/iplaymtg
+  schedule: "0 * * * *"
+- description: iplaymtg_item
+  url: /fetcher/iplaymtg/item
+  schedule: "*/30 * * * *"

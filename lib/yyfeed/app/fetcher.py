@@ -18,6 +18,7 @@ with app:
 
     JANDAN_PAGE_START = 900
     TTRSS_PAGE_START = 1
+    IPLAYMTG_PAGE_START = 1
 
 
     @route('/')
@@ -94,6 +95,51 @@ with app:
             return 'No item'
 
         item.description = ttrss.fetch_item(item.link)
+        db.merge(item)
+
+        return item.description
+
+
+    @route('/iplaymtg')
+    def iplaymtg(db, iplaymtg):
+        page = request.params.get('page')
+        if page:
+            page = int(page)
+            if page < IPLAYMTG_PAGE_START:
+                page = IPLAYMTG_PAGE_START
+
+        feed = db.query(Feed).get(iplaymtg.id)
+        if feed is None:
+            feed = Feed(
+                id = iplaymtg.id,
+                title = '旅法师营地 - 炉石传说',
+                link = iplaymtg.baseUrl,
+                description = '旅法师营地 Feed 生成器',
+            )
+            db.add(feed)
+
+        for item in iplaymtg.fetch(page):
+            feedItem = FeedItem(**item)
+            feedItem.feed_id = iplaymtg.id
+            db.merge(feedItem)
+
+        redirect(urlfor('iplaymtg/item'))
+
+
+    @route('/iplaymtg/item')
+    def iplaymtg_item(db, iplaymtg):
+        item = (
+            db.query(FeedItem)
+                .filter_by(feed_id=iplaymtg.id)
+                .filter(FeedItem.description == None)
+                .order_by(FeedItem.id)
+                .first()
+        )
+
+        if not item:
+            return 'No item'
+
+        item.description = iplaymtg.fetch_item(item.link)
         db.merge(item)
 
         return item.description
