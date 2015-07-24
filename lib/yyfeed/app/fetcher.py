@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from datetime import datetime
 from re import sub
 
 from bottle import Bottle, default_app, redirect, request, route
@@ -155,6 +156,7 @@ def _jandan_fetch(db, jandan, page=None):
 
         feedItem = FeedItem(**item)
         feedItem.feed_id = jandan.id
+        feedItem.datetime = datetime.now()
         db.merge(feedItem)
 
     return page, content
