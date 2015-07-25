@@ -6,15 +6,34 @@ $(function() {
 		itemSelector: '.item'
 	});
 
-	$.getJSON("/data", function(data) {
-		$.each(data.imgs, function(i, item) {
-            $.observable(imgs).insert({src: item});
-        });
+	var offset = 0;
 
-        $row.masonry('reloadItems');
+	getImages = function(offset) {
+		console.log("get offset[" + offset + "]")
 
-	    $row.imagesLoaded().progress(function() {
-		    $row.masonry('layout');
-	    });
+		url = "/data/images?offset=" + offset
+		$.getJSON(url, function(data) {
+			$.each(data.imgs, function(i, item) {
+				$.observable(imgs).insert({src: item});
+			});
+
+			$row.masonry('reloadItems');
+
+			$row.imagesLoaded().progress(function() {
+				$row.masonry('layout');
+			});
+		});
+	}
+
+	getImages(offset);
+	offset += 30;
+
+	$(window).scroll(function() {
+		var scrollHeight = $(document).height();
+		var scrollPosition = $(window).height() + $(window).scrollTop();
+		if ((scrollHeight - scrollPosition) / scrollHeight === 0) {
+			getImages(offset);
+			offset += 30;
+		}
 	});
 });
