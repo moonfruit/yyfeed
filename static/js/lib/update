@@ -1,0 +1,6 @@
+#!/bin/sh
+wget -N -i- <<END
+https://cdnjs.cloudflare.com/ajax/libs/masonry/3.3.1/masonry.pkgd.min.js
+https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/3.1.8/imagesloaded.pkgd.min.js
+http://www.jsviews.com/download/jsviews.min.js
+END

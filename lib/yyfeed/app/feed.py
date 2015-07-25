@@ -14,7 +14,7 @@ with app:
 
     ITEM_MAX_NUM = 100
 
-    # noinspection PyUnresolvedReferences
+
     @route('/')
     @route('/<id>')
     def feed(db, id='default'):

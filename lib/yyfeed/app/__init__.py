@@ -9,6 +9,7 @@ from bottle import mount, redirect, route, static_file
 
 def _mount(name):
     mount(name, import_module('.' + name, __name__).app)
+_mount('data')
 _mount('feed')
 _mount('fetcher')
 

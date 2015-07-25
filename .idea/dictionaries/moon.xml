@@ -3,14 +3,19 @@
     <words>
       <w>addheaders</w>
       <w>baiduspider</w>
+      <w>bdimg</w>
       <w>commentlist</w>
       <w>datatime</w>
       <w>fetchurl</w>
+      <w>imagesloaded</w>
       <w>imgs</w>
       <w>iplaymtg</w>
       <w>jandan</w>
+      <w>jsrender</w>
+      <w>jsviews</w>
       <w>lxml</w>
       <w>righttext</w>
+      <w>tmpl</w>
       <w>ttrss</w>
       <w>vwtb</w>
       <w>yyfeed</w>
