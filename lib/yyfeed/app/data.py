@@ -45,8 +45,8 @@ with app:
                         .filter(FeedItem.feed_id.in_(('default', 'ttrss')))
                         .filter(FeedItem.description != None)
                         .order_by(FeedItem.datetime.desc(), FeedItem.id.desc())
-                [offset:limit]
+                [offset:offset+limit]
         ):
-            desc = re.sub(r'^.*src="(.*)".*$', r'\1', feedItem.description, flags=re.M)
+            desc = re.sub(r'^.*src="(.*?)".*$', r'\1', feedItem.description, flags=re.M)
             imgs.extend(desc.split('\n'))
         return {"imgs": imgs}
