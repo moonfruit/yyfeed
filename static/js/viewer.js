@@ -1,4 +1,7 @@
 $(function() {
+
+	'use strict';
+
 	var imgs = [];
 	$.templates("#itemTemplate").link(".row", {imgs: imgs});
 
@@ -7,8 +10,7 @@ $(function() {
 	});
 
 	var offset = 0;
-
-	getImages = function(offset) {
+	getImages = function() {
 		console.log("get offset[" + offset + "]")
 
 		url = "/data/images?offset=" + offset
@@ -22,18 +24,17 @@ $(function() {
 			$row.imagesLoaded().progress(function() {
 				$row.masonry('layout');
 			});
+
+			offset += 30;
 		});
 	}
 
-	getImages(offset);
-	offset += 30;
-
+	getImages();
 	$(window).scroll(function() {
 		var scrollHeight = $(document).height();
 		var scrollPosition = $(window).height() + $(window).scrollTop();
 		if ((scrollHeight - scrollPosition) / scrollHeight === 0) {
-			getImages(offset);
-			offset += 30;
+			getImages();
 		}
 	});
 });

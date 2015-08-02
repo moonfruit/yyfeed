@@ -15,12 +15,12 @@ cron:
 - description: jandan
   url: /fetcher
   schedule: "0 */2 * * *"
-- description: ttrss
-  url: /fetcher/ttrss
-  schedule: "10 */3 * * *"
-- description: ttrss_item
-  url: /fetcher/ttrss/item
-  schedule: "15,20,25 */3 * * *"
+#- description: ttrss
+#  url: /fetcher/ttrss
+#  schedule: "10 */3 * * *"
+#- description: ttrss_item
+#  url: /fetcher/ttrss/item
+#  schedule: "15,20,25 */3 * * *"
 - description: iplaymtg
   url: /fetcher/iplaymtg
   schedule: "40 * * * *"
