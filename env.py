@@ -5,7 +5,7 @@ import config
 from bottle import app
 from bottle import run
 
-from yyfeed.config import plugins, cache_init, db_init
+from yyfeed.config import plugins, db_init
 from yyfeed.config import jandan_init, ttrss_init, iplaymtg_init
 from yyfeed.util import app_init
 from yyfeed.util.web import install
